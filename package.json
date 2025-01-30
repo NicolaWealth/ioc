@@ -1,0 +1,54 @@
+{
+  "name": "@nicola_wealth/ioc",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "author": "Nicola Wealth Inc",
+  "contributors": [
+    {
+      "name": "Cliff Hammerschmidt"
+    },
+    {
+      "name": "Skye Haik"
+    },
+    {
+      "name": "Travis Rempel"
+    },
+    {
+      "name": "Mel Delosada"
+    }
+  ],
+  "license": "MIT",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist/* && rm -f tsconfig.tsbuildinfo",
+    "build": "tsc",
+    "lint": "eslint src",
+    "test": "mocha",
+    "test-r": "mocha -R spec",
+    "cover": "nyc mocha",
+    "cover:report": "nyc --reporter=html --reporter=lcov --reporter=text mocha -c --reporter=spec",
+    "doc": "npx typedoc src/*.ts src/**/*.ts --out dist/doc"
+  },
+  "engines": {
+    "node": "^22"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5",
+    "eslint": "^9",
+    "@typescript-eslint/eslint-plugin": "^8",
+    "@types/mocha": "^9",
+    "@types/sinon": "^10",
+    "@types/node": "^22",
+    "sinon": "^19",
+    "mocha-junit-reporter": "^2",
+    "mocha": "^10",
+    "ts-node": "^10",
+    "eslint-config-turbo": "^2",
+    "nyc": "^15"
+  },
+  "packageManager": "npm@10.9.0"
+}
