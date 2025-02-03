@@ -42,5 +42,24 @@ describe("ioc tests", () => {
     caller.deps = iocT3.dep(origDep);
     assert.throws(() => {caller.deps.set(overwriteDep);}, {name: 'Error', message: `otherDep not in ioc deps`});
   });
+  it("deps reset", async () => {
+    const iocT4 = iocFactory();
+    const orig = sinon.stub();
+    const origDep = {mainDep: orig};
+    const overwrite = sinon.stub();
+    const overwriteDep = {mainDep: overwrite};
+    const caller = (): void  => {
+      origDep.mainDep("in caller");
+    };
+    caller.deps = iocT4.dep(origDep);
+    caller.deps.set(overwriteDep);
+    caller();
+    sinon.assert.calledOnceWithExactly(overwrite, "in caller");
+    sinon.assert.notCalled(orig);
+    caller.deps.reset();
+    caller();
+    sinon.assert.calledOnceWithExactly(overwrite, "in caller");
+    sinon.assert.calledOnceWithExactly(orig, "in caller");
+  });
 });
 
