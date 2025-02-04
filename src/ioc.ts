@@ -2,14 +2,14 @@ import {deferUntilFactory} from "@nicola_wealth/defer_until";
 
 export const iocFactory = () => {
   let _productionMode = false;
-  // used to track ioc.dep based overrides so the ioc.reset will also reset them.
+  // used to track ioc.dep based overrides so productionMode will reset them
   const deferrals = deferUntilFactory();
 
 // productionMode()
-// disable set and force use of _defaults
-// prevents using set outside of tests.
+// disable dep.set and force use of original dependencies
+// prevents using dep.set outside of tests
   const productionMode = () => {
-    // ADD SOMETHING ABOUT DEFER UNTIL
+    // Utilizes defer_until package (enables deferring a stack of function calls until a later point) to call dep.reset()
     deferrals.later();
     return _productionMode = true;
   };
