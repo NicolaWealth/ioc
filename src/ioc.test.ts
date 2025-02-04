@@ -5,61 +5,81 @@ import assert from "assert";
 
 describe("ioc tests", () => {
   it("deps overwriting", async () => {
-    const iocT1 = iocFactory();
-    const orig = sinon.stub().throws("Using wrong dep");
-    const origDep = {mainDep: orig};
-    const overwrite = sinon.stub();
-    const overwriteDep = {mainDep: overwrite};
+    // Setup Dependencies
+    const defaultDependency = sinon.stub().throws("Using wrong dep");
+    const defaultDependencyObject = {mainDep: defaultDependency};
+    const overrideDependency = sinon.stub();
+    const overrideDependencyObject = {mainDep: overrideDependency};
+
+    // Setup IOC
     const caller = (): void  => {
-      origDep.mainDep();
+      defaultDependencyObject.mainDep();
     };
-    caller.deps = iocT1.dep(origDep);
-    caller.deps.set(overwriteDep);
+    const iocT1 = iocFactory();
+    caller.deps = iocT1.dep(defaultDependencyObject);
+    caller.deps.set(overrideDependencyObject);
+
+    // Caller should not throw an error
     caller();
   });
   it("production mode throws errors", async () => {
-    const iocT2 = iocFactory();
-    const orig = sinon.stub();
-    const origDep = {mainDep: orig};
-    const overwrite = sinon.stub();
-    const overwriteDep = {mainDep: overwrite};
+    // Setup Dependencies
+    const defaultDependency = sinon.stub();
+    const defaultDependencyObject = {mainDep: defaultDependency};
+    const overrideDependency = sinon.stub();
+    const overrideDependencyObject = {mainDep: overrideDependency};
+
+    // Setup IOC
     const caller = (): void  => {
-      origDep.mainDep();
+      defaultDependencyObject.mainDep();
     };
-    caller.deps = iocT2.dep(origDep);
+    const iocT2 = iocFactory();
+    caller.deps = iocT2.dep(defaultDependencyObject);
+
     iocT2.productionMode();
-    assert.throws(() => {caller.deps.set(overwriteDep);}, {name: 'Error', message: 'dep.set(...) is not valid in production mode.'});
+    assert.throws(() => {caller.deps.set(overrideDependencyObject);}, {name: 'Error', message: 'dep.set(...) is not valid in production mode.'});
   });
   it("deps naming error", async () => {
-    const iocT3 = iocFactory();
-    const orig = sinon.stub();
-    const origDep = {mainDep: orig};
-    const overwrite = sinon.stub();
-    const overwriteDep = {otherDep: overwrite};
+    // Setup Dependencies
+    const defaultDependency = sinon.stub();
+    const defaultDependencyObject = {mainDep: defaultDependency};
+    const overrideDependency = sinon.stub();
+    const overrideDependencyObject = {otherDep: overrideDependency};
+
+    // Setup IOC
     const caller = (): void  => {
-      origDep.mainDep();
+      defaultDependencyObject.mainDep();
     };
-    caller.deps = iocT3.dep(origDep);
-    assert.throws(() => {caller.deps.set(overwriteDep);}, {name: 'Error', message: `otherDep not in ioc deps`});
+    const iocT3 = iocFactory();
+    caller.deps = iocT3.dep(defaultDependencyObject);
+
+    assert.throws(() => {caller.deps.set(overrideDependencyObject);}, {name: 'Error', message: `otherDep not in ioc deps`});
   });
   it("deps reset", async () => {
-    const iocT4 = iocFactory();
-    const orig = sinon.stub();
-    const origDep = {mainDep: orig};
-    const overwrite = sinon.stub();
-    const overwriteDep = {mainDep: overwrite};
+    // Setup Dependencies
+    const defaultDependency = sinon.stub();
+    const defaultDependencyObject = {mainDep: defaultDependency};
+    const overrideDependency = sinon.stub();
+    const overrideDependencyObject = {mainDep: overrideDependency};
+
+    // Setup IOC
     const caller = (): void  => {
-      origDep.mainDep("in caller");
+      defaultDependencyObject.mainDep("in caller");
     };
-    caller.deps = iocT4.dep(origDep);
-    caller.deps.set(overwriteDep);
+    const iocT4 = iocFactory();
+    caller.deps = iocT4.dep(defaultDependencyObject);
+    caller.deps.set(overrideDependencyObject);
+
+    // Override dependencies gets called once
     caller();
-    sinon.assert.calledOnceWithExactly(overwrite, "in caller");
-    sinon.assert.notCalled(orig);
+    sinon.assert.calledOnceWithExactly(overrideDependency, "in caller");
+    sinon.assert.notCalled(defaultDependency);
+
+    // Override dependencies are no longer called after reset
     caller.deps.reset();
     caller();
-    sinon.assert.calledOnceWithExactly(overwrite, "in caller");
-    sinon.assert.calledOnceWithExactly(orig, "in caller");
+    sinon.assert.calledOnceWithExactly(overrideDependency, "in caller");
+    sinon.assert.calledOnceWithExactly(defaultDependency, "in caller");
   });
 });
 
