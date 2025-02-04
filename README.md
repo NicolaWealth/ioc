@@ -1,3 +1,5 @@
+![Tests Passing](https://github.com/NicolaWealth/ioc/actions/workflows/autoTestMainBadge.yml/badge.svg)
+
 # Introduction
 The `ioc` (Inversion of Control) package simplifies developer testing by allowing for decoupling of code from its dependencies. With `ioc`, dependencies can be overwritten with stubs in test cases such that the original dependencies are not invoked during testing.
 
