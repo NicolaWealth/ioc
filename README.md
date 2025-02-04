@@ -7,7 +7,7 @@ This package should be installed via npm. You must have npm installed first. The
 `npm install @nicola_wealth/ioc`
 
 # Usage
-This package provides functionality to easily replace dependencies with stubs during testing. In order to use `ioc` in testing, the real dependencies in your code must be implemented with `ioc` so they can later be overwritten and restored. 
+This package provides functionality to easily manage dependencies during testing. In order to use `ioc` in testing, the real dependencies in your code must be implemented with `ioc` so they can later be overwritten and restored. 
 
 Some common use cases may include testing code without invoking:
 - database calls
