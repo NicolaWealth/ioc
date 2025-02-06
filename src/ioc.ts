@@ -1,4 +1,4 @@
-import {deferUntilFactory} from "@nicola_wealth/defer_until";
+import {deferUntilFactory} from "@nicolawealth/defer_until";
 
 export const iocFactory = () => {
   let _productionMode = false;

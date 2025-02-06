@@ -1,5 +1,5 @@
 {
-  "name": "@nicola_wealth/ioc",
+  "name": "@nicolawealth/ioc",
   "version": "0.1.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -35,20 +35,22 @@
   "engines": {
     "node": "^22"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@nicolawealth/defer_until": "^0.1.1"
+  },
   "devDependencies": {
-    "typescript": "^5",
-    "eslint": "^9",
-    "@typescript-eslint/eslint-plugin": "^8",
     "@types/mocha": "^9",
-    "@types/sinon": "^10",
     "@types/node": "^22",
-    "sinon": "^19",
-    "mocha-junit-reporter": "^2",
-    "mocha": "^10",
-    "ts-node": "^10",
+    "@types/sinon": "^10",
+    "@typescript-eslint/eslint-plugin": "^8",
+    "eslint": "^9",
     "eslint-config-turbo": "^2",
-    "nyc": "^15"
+    "mocha": "^10",
+    "mocha-junit-reporter": "^2",
+    "nyc": "^15",
+    "sinon": "^19",
+    "ts-node": "^10",
+    "typescript": "^5"
   },
   "packageManager": "npm@10.9.0"
 }
