@@ -6,7 +6,7 @@ The `ioc` (Inversion of Control) package simplifies developer testing by allowin
 # Installation
 This package should be installed via npm. You must have npm installed first. The following can be run on the commandline to install the `ioc` package with npm:
 
-`npm install @nicola_wealth/ioc`
+`npm install @nicolawealth/ioc`
 
 # Usage
 This package provides functionality to easily manage dependencies during testing. In order to use `ioc` in testing, the real dependencies in your code must be implemented with `ioc` so they can later be overwritten and restored. 
