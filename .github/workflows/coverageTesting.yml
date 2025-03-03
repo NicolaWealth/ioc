@@ -40,7 +40,7 @@ jobs:
           git config --global user.name "skyehaik"
 
       - name: Mark the repository as safe
-        run: git config --global --add safe.directory /__w/defer_until/defer_until
+        run: git config --global --add safe.directory /__w/ioc/ioc
 
       - name: Verify remote URL
         run: |
