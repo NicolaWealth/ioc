@@ -164,7 +164,6 @@ describe("ioc tests", () => {
     const defaultDependencyTwo = sinon.stub();
     const defaultDependencyOneObject = {firstDep: defaultDependencyOne};
     const defaultDependencyTwoObject = {secondDep: defaultDependencyTwo};
-    //const defaultDependencyObject = {firstDep: defaultDependencyOne, secondDep: defaultDependencyTwo};
     const overrideDependencyOne = sinon.stub();
     const overrideDependencyTwo = sinon.stub();
     const overrideDependencyObject = {firstDep: overrideDependencyOne, secondDep: overrideDependencyTwo};
