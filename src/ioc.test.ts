@@ -1,5 +1,5 @@
 // @ts-ignore
-import {iocFactory} from "./ioc.ts";
+import {iocFactory} from "./iocSetup.ts";
 import sinon from "sinon";
 import assert from "assert";
 
