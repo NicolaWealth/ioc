@@ -1,5 +1,5 @@
 // @ts-ignore
-import {iocFactory} from "./ioc_setupetup.ts";
+import {iocFactory} from "./ioc_setup.ts";
 import sinon from "sinon";
 import assert from "assert";
 
@@ -80,6 +80,127 @@ describe("ioc tests", () => {
     caller();
     sinon.assert.calledOnceWithExactly(overrideDependency, "in caller");
     sinon.assert.calledOnceWithExactly(defaultDependency, "in caller");
+  });
+  it("setDefault full functionality", async () => {
+    // Setup Dependencies
+    const defaultDependency = sinon.stub();
+    const defaultDependencyObject = {mainDep: defaultDependency};
+    const tooManyEntryDependencyObject = {mainDep: defaultDependency, secondDep: defaultDependency};
+    const additionalDependency = sinon.stub();
+    const additionalDependencyObject = {mainDep: additionalDependency};
+
+    // Setup IOC
+    const iocT5 = iocFactory();
+
+    // setDefault() requires only one default to be set at a time
+    assert.throws(() => {iocT5.setDefault(tooManyEntryDependencyObject);}, {name: 'Error', message: `ioc.setDefault({name}) takes only one thing at a time.`});
+
+    // Successful setDefault() returns iocGet wrapper for the given name & get() basic functionality behaves as expected
+    assert.strictEqual(iocT5.setDefault(defaultDependencyObject)(), defaultDependency);
+
+    // Dependency names must be unique
+    assert.throws(() => {iocT5.setDefault(additionalDependencyObject);}, {name: 'Error', message: `ioc.setDefault({mainDep:...}) -> already set.}`});
+  });
+  it("get function error", async () => {
+    // Setup IOC
+    const iocT6 = iocFactory();
+
+    // get() throws error if a default has not yet been set
+    assert.throws(() => {iocT6.get("mainDep");}, {name: 'Error', message: `ioc.get("mainDep") no current or default defined.`});
+  });
+  it("set full functionality", async () => {
+    // Setup Dependencies
+    const defaultDependency = sinon.stub();
+    const defaultDependencyObject = {mainDep: defaultDependency};
+    const overrideDependency = sinon.stub();
+
+    // Setup IOC
+    const iocT7 = iocFactory();
+
+    // set() throws error if a default has not yet been set
+    assert.throws(() => {iocT7.set("mainDep", overrideDependency);}, {name: 'Error', message: `ioc.set("mainDep") no default defined.`});
+
+    // set() overwrites a dependency successfully
+    iocT7.setDefault(defaultDependencyObject);
+    assert.strictEqual(iocT7.get("mainDep"), defaultDependency);
+    assert.strictEqual(iocT7.set("mainDep", overrideDependency), overrideDependency);
+    assert.strictEqual(iocT7.get("mainDep"), overrideDependency);
+
+    // set() cannot be used in production mode
+    iocT7.productionMode();
+    assert.throws(() => {iocT7.set("mainDep", defaultDependency);}, {name: 'Error', message: `set("mainDep") is not valid in production mode.`});
+  });
+  it("setMany functionality", async () => {
+    // Setup Dependencies
+    const defaultDependencyOne = sinon.stub();
+    const defaultDependencyTwo = sinon.stub();
+    const defaultDependencyOneObject = {firstDep: defaultDependencyOne};
+    const defaultDependencyTwoObject = {secondDep: defaultDependencyTwo};
+    const defaultDependencyObject = {firstDep: defaultDependencyOne, secondDep: defaultDependencyTwo};
+    const overrideDependencyOne = sinon.stub();
+    const overrideDependencyTwo = sinon.stub();
+    const overrideDependencyObject = {firstDep: overrideDependencyOne, secondDep: overrideDependencyTwo};
+
+    // Setup IOC
+    const iocT8 = iocFactory();
+
+    // setMany() sets dependencies without defaults set
+    iocT8.setMany(defaultDependencyObject);
+    assert.strictEqual(iocT8.get("firstDep"), defaultDependencyOne);
+    assert.strictEqual(iocT8.get("secondDep"), defaultDependencyTwo);
+
+    // setMany() overrides dependencies with defaults set
+    iocT8.setDefault(defaultDependencyOneObject);
+    iocT8.setDefault(defaultDependencyTwoObject);
+    assert.strictEqual(iocT8.get("firstDep"), defaultDependencyOne);
+    assert.strictEqual(iocT8.get("secondDep"), defaultDependencyTwo);
+    iocT8.setMany(overrideDependencyObject, true);
+    assert.strictEqual(iocT8.get("firstDep"), overrideDependencyOne);
+    assert.strictEqual(iocT8.get("secondDep"), overrideDependencyTwo);
+  });
+  it("reset & productionMode functionality", async () => {
+    // Setup Dependencies
+    const defaultDependencyOne = sinon.stub();
+    const defaultDependencyTwo = sinon.stub();
+    const defaultDependencyOneObject = {firstDep: defaultDependencyOne};
+    const defaultDependencyTwoObject = {secondDep: defaultDependencyTwo};
+    //const defaultDependencyObject = {firstDep: defaultDependencyOne, secondDep: defaultDependencyTwo};
+    const overrideDependencyOne = sinon.stub();
+    const overrideDependencyTwo = sinon.stub();
+    const overrideDependencyObject = {firstDep: overrideDependencyOne, secondDep: overrideDependencyTwo};
+
+    // Setup IOC
+    const iocT9 = iocFactory();
+
+    // Set defaults and override them
+    iocT9.setDefault(defaultDependencyOneObject);
+    iocT9.setDefault(defaultDependencyTwoObject);
+    assert.strictEqual(iocT9.get("firstDep"), defaultDependencyOne);
+    assert.strictEqual(iocT9.get("secondDep"), defaultDependencyTwo);
+    iocT9.setMany(overrideDependencyObject, true);
+    assert.strictEqual(iocT9.get("firstDep"), overrideDependencyOne);
+    assert.strictEqual(iocT9.get("secondDep"), overrideDependencyTwo);
+
+    // Reset one dependency
+    iocT9.reset("firstDep");
+    assert.strictEqual(iocT9.get("firstDep"), defaultDependencyOne);
+    assert.strictEqual(iocT9.get("secondDep"), overrideDependencyTwo);
+
+    // Reset all dependencies
+    iocT9.set("firstDep", overrideDependencyOne);
+    assert.strictEqual(iocT9.get("firstDep"), overrideDependencyOne);
+    assert.strictEqual(iocT9.get("secondDep"), overrideDependencyTwo);
+    iocT9.reset();
+    assert.strictEqual(iocT9.get("firstDep"), defaultDependencyOne);
+    assert.strictEqual(iocT9.get("secondDep"), defaultDependencyTwo);
+
+    // Production mode resets all dependencies
+    iocT9.setMany(overrideDependencyObject, true);
+    assert.strictEqual(iocT9.get("firstDep"), overrideDependencyOne);
+    assert.strictEqual(iocT9.get("secondDep"), overrideDependencyTwo);
+    iocT9.productionMode();
+    assert.strictEqual(iocT9.get("firstDep"), defaultDependencyOne);
+    assert.strictEqual(iocT9.get("secondDep"), defaultDependencyTwo);
   });
 });
 

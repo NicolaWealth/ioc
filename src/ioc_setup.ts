@@ -12,11 +12,8 @@ export const iocFactory = () => {
   // lookup by name and return _current.
   // validates a default exists, as we'd only use this to lookup things that should exist
   const get = <T>(name: string): T => {
-    if (_current[name] === undefined) {
-      if (_defaults[name] === undefined) {
-        throw new Error(`ioc.get("${name}") no current or default defined.`);
-      }
-      throw new Error(`ioc.get("${name}") no current defined.`);
+    if (_current[name] === undefined || _current[name] === undefined) {
+      throw new Error(`ioc.get("${name}") no current or default defined.`);
     }
     return _current[name] as T;
   };
