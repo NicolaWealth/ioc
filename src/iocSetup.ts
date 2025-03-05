@@ -95,7 +95,7 @@ export const iocFactory = () => {
     const reset = () => Object.assign(dependencies, originalDependencies);
     const set = (deps: Record<string, unknown>) => {
       if (_productionMode) {
-        throw new Error(`dep.set(...) is not valid in produqction mode.`);
+        throw new Error(`dep.set(...) is not valid in production mode.`);
       }
       for (const [name, value] of Object.entries(deps)) {
         if (!Object.hasOwnProperty.call(dependencies, name)) {
