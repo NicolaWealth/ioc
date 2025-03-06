@@ -20,11 +20,25 @@ Some common use cases may include testing code without invoking:
 - etc.
 
 # Interface
-The `ioc` package provides the function `iocFactory` which returns an instance of the `ioc` object with the following properties:
-- `productionMode();` disables the use of ioc and forces the use of the original dependencies regardless of if they have been overridden or not
-- `dep();` provides the primary functionality of overriding and resetting dependencies through the following functions:
-  * `dep.set(deps: Record<string, unknown>);` overrides the component level dependencies with the provided stubs
-  * `dep.reset();` restores dependencies to their original state
+The package provides two methods to implement `ioc` in your code, the deps method and the defaults method. The deps method is implemented with the `ioc.deps()` function. 
+The defaults method is implemented with the `ioc.setDefault()`, `ioc.set()`, `ioc.setMany()`, and `ioc.get()` methods. The `ioc.productionMode()` and `ioc.reset()` functions are shared amongst the two methods. 
+The `ioc` package provides the instance of the `ioc` object in `ioc.ts`. For proper functionality ensure this shared instance is used amongst all your files and do not use the function `iocFactory()` provided in `ioc_setup.ts`.
+
+### Deps Method
+- `dep(dependencies: Record<string, unknown>);` provides the primary functionality of overriding dependencies through the following function:
+  * `dep.set(deps: Record<string, unknown>);` overrides the component level dependencies with the provided stubs.
+- `reset();` resets all current dependencies to their original values.
+- `productionMode();` disables the use of ioc and forces the use of the original dependencies regardless of if they have been overridden or not.
+
+### Defaults Method
+- `setDefault(thing: { [name: string]: T });` registers a unique name for T and sets it as a real dependency under the given name. Returns a get() wrapper to the given dependency. 
+- `set(name: string, t: T, expectDefault = true);` overrides the current value of a single dependency T with given name until reset is called.
+  * Note: expectDefault is an optional parameter which defaults to true thus requiring any set dependency has already been registered with setDefault
+- `setMany(many: Record<string, unknown>, expectDefault = false);` provides the same functionality as set but for a record of dependencies.
+  * Note: expectDefault is an optional parameter which defaults to false thus not requiring all setMany dependencies to have been previously registered with setDefault
+- `get(name: string);` validates the existence of a registered dependency and returns the current dependency under the given name.
+- `reset();` resets all registered dependencies to their set defaults regardless of current values.
+- `productionMode();` disables the use of set and forces the use of the default dependency values regardless (cannot be undone).
 
 Note: be aware the original dependencies are still imported when using `ioc` in tests and any side effects of those imports are run during tests
 

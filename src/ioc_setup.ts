@@ -86,7 +86,6 @@ export const iocFactory = () => {
   // override component level dependencies
   // note: be aware the original dependencies are still imported when using this in tests and any side effects of those imports are run during tests
   // use the split form of get/set if you want complete abstraction of the dependency implementation from its usage.
-  // see tuid.default.ts in anycore, and it's differing implementations in nodecore vs webcore.
   const dep = (dependencies: Record<string, unknown>) => {
     const originalDependencies = Object.assign({}, dependencies);
     const reset = () => Object.assign(dependencies, originalDependencies);
