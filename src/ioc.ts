@@ -1,3 +1,3 @@
-import {iocFactory} from "./ioc_setup";
+import {iocFactory} from "./ioc_factory";
 
 export const ioc = iocFactory();

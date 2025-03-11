@@ -20,24 +20,23 @@ Some common use cases may include testing code without invoking:
 - etc.
 
 # Interface
-The package provides two methods to implement `ioc` in your code, the deps method and the defaults method. The deps method is implemented with the `ioc.deps()` function. 
-The defaults method is implemented with the `ioc.setDefault()`, `ioc.set()`, `ioc.setMany()`, and `ioc.get()` methods. The `ioc.productionMode()` and `ioc.reset()` functions are shared amongst the two methods. 
-The `ioc` package provides the instance of the `ioc` object in `ioc.ts`. For proper functionality ensure this shared instance is used amongst all your files and do not use the function `iocFactory()` provided in `ioc_setup.ts`.
+The package provides two ways of implementing `ioc` in your code, the dep implementation and the default implementation. The dep pattern is implemented with the `ioc.dep()` function. 
+The default pattern is implemented with the `ioc.setDefault()`, `ioc.setDeps()`, and `ioc.get()` methods. The `ioc.productionMode()` and `ioc.reset()` functions are shared amongst the two patterns.
+The default ioc style allows for a "universal" setting of application-wide dependencies such that they can be registered just once. Whereas the dep ioc style is preferable more for component-level dependencies, providing more granular control.
+The `ioc` package provides the instance of the `ioc` object in `ioc.ts`. For proper functionality ensure this shared instance is used amongst all your files and do not use the function `iocFactory()` provided in `ioc_factory.ts`.
 
 ### Deps Method
-- `dep(dependencies: Record<string, unknown>);` provides the primary functionality of overriding dependencies through the following function:
-  * `dep.set(deps: Record<string, unknown>);` overrides the component level dependencies with the provided stubs.
-- `reset();` resets all current dependencies to their original values.
+- `dep({dependencies});` provides the primary functionality of overriding dependencies through the following function:
+  * `dep.set({dependencies});` overrides the component level dependencies with the provided stubs.
+  * `dep.reset();` resets all component level dependencies to their original values.
 - `productionMode();` disables the use of ioc and forces the use of the original dependencies regardless of if they have been overridden or not.
 
 ### Defaults Method
-- `setDefault(thing: { [name: string]: T });` registers a unique name for T and sets it as a real dependency under the given name. Returns a get() wrapper to the given dependency. 
-- `set(name: string, t: T, expectDefault = true);` overrides the current value of a single dependency T with given name until reset is called.
-  * Note: expectDefault is an optional parameter which defaults to true thus requiring any set dependency has already been registered with setDefault
-- `setMany(many: Record<string, unknown>, expectDefault = false);` provides the same functionality as set but for a record of dependencies.
+- `setDefault(dependencyObject: {'name': dependency});` registers a unique name and sets it as a real dependency under the given name. Returns a get() wrapper to the given dependency.
+- `setDeps({dependencies});` overrides the current value of a list of dependencies with the given names until reset is called.
   * Note: expectDefault is an optional parameter which defaults to false thus not requiring all setMany dependencies to have been previously registered with setDefault
-- `get(name: string);` validates the existence of a registered dependency and returns the current dependency under the given name.
-- `reset();` resets all registered dependencies to their set defaults regardless of current values.
+- `get('name');` validates the existence of a registered dependency and returns the current dependency under the given name.
+- `reset();` resets all registered dependencies to their set defaults regardless of current values as well as resetting all component level dependencies (dep pattern dependencies).
 - `productionMode();` disables the use of set and forces the use of the default dependency values regardless (cannot be undone).
 
 Note: be aware the original dependencies are still imported when using `ioc` in tests and any side effects of those imports are run during tests

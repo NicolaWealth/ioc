@@ -23,8 +23,8 @@ export const iocFactory = () => {
   // names must be unique, and once set are permanent
   // state in T is allowed and preserved across set/reset
   // returns a iocGet wrapper for the name.
-  const setDefault = <T>(thing: { [name: string]: T }) => {
-    const entries = Object.entries(thing);
+  const setDefault = <T>(dependency: { [name: string]: T }) => {
+    const entries = Object.entries(dependency);
     if (entries.length !== 1) {
       throw new Error(`ioc.setDefault({name}) takes only one thing at a time.`);
     }
@@ -38,25 +38,25 @@ export const iocFactory = () => {
     return () => get<T>(name);
   };
 
-  // set(name, T)
-  // override name to T until reset
+  // setDeps(name, T)
+  // override given dependencies with same names until reset
   // this is _only_ used by tests, and not in "normal" code paths
   // allows for stubbing out dependencies without using ctor injection
   // mainly added to make dealing with transitive dependencies in UI components easier
-  // use ioc.set in `before` blocks or at the start of each `it`
+  // use ioc.setDeps in `before` blocks or at the start of each `it`
   // do *not* use inside the `describe` block to wrap an `it`, as tests are only registered during the `it` call to be run after the describe returns
   // note, this is not a push, so doing multiple sets will not preserve any but the last set
-  const set = <T>(name: string, t: T, expectDefault = true) => {
-    if (_productionMode) {
-      throw new Error(`set("${name}") is not valid in production mode.`);
-    }
-    if (expectDefault && _defaults[name] === undefined) {
-      throw new Error(`ioc.set("${name}") no default defined.`);
-    }
-    return _current[name] = t;
+  const setDeps = (dependencies: Record<string, unknown>, expectDefault = false) => {
+    Object.entries(dependencies).forEach(([k, v]) => {
+      if (_productionMode) {
+        throw new Error(`set("${k}") is not valid in production mode.`);
+      }
+      if (expectDefault && _defaults[k] === undefined) {
+        throw new Error(`ioc.set("${k}") no default defined.`);
+      }
+      _current[k] = v;
+    });
   };
-
-  const setMany = (many: Record<string, unknown>, expectDefault = false) => Object.entries(many).forEach(([k, v]) => set(k, v, expectDefault));
 
   // used to track ioc.dep based overrides so the ioc.reset will also reset them.
   const deferrals = deferUntilFactory();
@@ -103,5 +103,5 @@ export const iocFactory = () => {
     };
     return {set, reset};
   };
-  return {setDefault, set, setMany, get, reset, productionMode, dep};
+  return {setDefault, setDeps, get, reset, productionMode, dep};
 };
