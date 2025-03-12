@@ -25,15 +25,15 @@ The default pattern is implemented with the `ioc.setDefault()`, `ioc.setDeps()`,
 The default ioc style allows for a "universal" setting of application-wide dependencies such that they can be registered just once. Whereas the dep ioc style is preferable more for component-level dependencies, providing more granular control.
 The `ioc` package provides the instance of the `ioc` object in `ioc.ts`. For proper functionality ensure this shared instance is used amongst all your files and do not use the function `iocFactory()` provided in `ioc_factory.ts`.
 
-### Deps Method
+### Dep Pattern
 - `dep({dependencies});` provides the primary functionality of overriding dependencies through the following function:
   * `dep.set({dependencies});` overrides the component level dependencies with the provided stubs.
   * `dep.reset();` resets all component level dependencies to their original values.
 - `productionMode();` disables the use of ioc and forces the use of the original dependencies regardless of if they have been overridden or not.
 
-### Defaults Method
+### Default Pattern
 - `setDefault(dependencyObject: {'name': dependency});` registers a unique name and sets it as a real dependency under the given name. Returns a get() wrapper to the given dependency.
-- `setDeps({dependencies});` overrides the current value of a list of dependencies with the given names until reset is called.
+- `setDeps({dependenciesObject});` overrides the current value of a list of dependencies with the given names until reset is called.
   * Note: expectDefault is an optional parameter which defaults to false thus not requiring all setMany dependencies to have been previously registered with setDefault
 - `get('name');` validates the existence of a registered dependency and returns the current dependency under the given name.
 - `reset();` resets all registered dependencies to their set defaults regardless of current values as well as resetting all component level dependencies (dep pattern dependencies).
@@ -43,5 +43,3 @@ Note: be aware the original dependencies are still imported when using `ioc` in 
 
 # Testing
 Tests can be found in `ioc.test.ts` located in `ioc/src` and should be run with sinon, mocha and nyc.
-
-

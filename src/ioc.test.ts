@@ -108,7 +108,7 @@ describe("ioc tests", () => {
     // get() throws error if a default has not yet been set
     assert.throws(() => {iocT6.get("mainDep");}, {name: 'Error', message: `ioc.get("mainDep") no current or default defined.`});
   });
-  it("setDeps functionality", async () => {
+  it("setDeps single dependency functionality", async () => {
     // Setup Dependencies
     const defaultDependency = sinon.stub();
     const defaultDependencyObject = {mainDep: defaultDependency};
@@ -131,7 +131,7 @@ describe("ioc tests", () => {
     iocT7.productionMode();
     assert.throws(() => {iocT7.setDeps(defaultDependencyObject);}, {name: 'Error', message: `set("mainDep") is not valid in production mode.`});
   });
-  it("setDeps functionality", async () => {
+  it("setDeps multiple dependency functionality", async () => {
     // Setup Dependencies
     const defaultDependencyOne = sinon.stub();
     const defaultDependencyTwo = sinon.stub();

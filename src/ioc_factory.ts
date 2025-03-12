@@ -18,7 +18,7 @@ export const iocFactory = () => {
     return _current[name] as T;
   };
 
-  // setDefault(name, T)
+  // setDefault(name: T)
   // register a name for T
   // names must be unique, and once set are permanent
   // state in T is allowed and preserved across set/reset
@@ -38,7 +38,7 @@ export const iocFactory = () => {
     return () => get<T>(name);
   };
 
-  // setDeps(name, T)
+  // setDeps(dependenciesObject)
   // override given dependencies with same names until reset
   // this is _only_ used by tests, and not in "normal" code paths
   // allows for stubbing out dependencies without using ctor injection
