@@ -13,7 +13,7 @@ export const iocFactory = () => {
   // validates a default exists, as we'd only use this to lookup things that should exist
   const get = <T>(name: string): T => {
     if (_current[name] === undefined && _defaults[name] === undefined) {
-      throw new Error(`ioc.get("${name}") no current or default defined.`);
+      throw new Error(`ioc.get("${name}") current and default undefined.`);
     }
     return _current[name] as T;
   };
@@ -49,13 +49,14 @@ export const iocFactory = () => {
   const setDeps = (dependencies: Record<string, unknown>, expectDefault = false) => {
     Object.entries(dependencies).forEach(([k, v]) => {
       if (_productionMode) {
-        throw new Error(`set("${k}") is not valid in production mode.`);
+        throw new Error(`ioc.setDeps("${k}") is not valid in production mode.`);
       }
       if (expectDefault && _defaults[k] === undefined) {
-        throw new Error(`ioc.set("${k}") no default defined.`);
+        throw new Error(`ioc.setDeps("${k}") no default defined.`);
       }
       _current[k] = v;
     });
+    return _current;
   };
 
   // used to track ioc.dep based overrides so the ioc.reset will also reset them.

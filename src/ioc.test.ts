@@ -106,7 +106,7 @@ describe("ioc tests", () => {
     const iocT6 = iocFactory();
 
     // get() throws error if a default has not yet been set
-    assert.throws(() => {iocT6.get("mainDep");}, {name: 'Error', message: `ioc.get("mainDep") no current or default defined.`});
+    assert.throws(() => {iocT6.get("mainDep");}, {name: 'Error', message: `ioc.get("mainDep") current and default undefined.`});
   });
   it("setDeps single dependency functionality", async () => {
     // Setup Dependencies
@@ -119,7 +119,7 @@ describe("ioc tests", () => {
     const iocT7 = iocFactory();
 
     // set() throws error if a default has not yet been set
-    assert.throws(() => {iocT7.setDeps(overrideDependencyObject, true);}, {name: 'Error', message: `ioc.set("mainDep") no default defined.`});
+    assert.throws(() => {iocT7.setDeps(overrideDependencyObject, true);}, {name: 'Error', message: `ioc.setDeps("mainDep") no default defined.`});
 
     // set() overwrites a dependency successfully
     iocT7.setDefault(defaultDependencyObject);
@@ -129,7 +129,7 @@ describe("ioc tests", () => {
 
     // set() cannot be used in production mode
     iocT7.productionMode();
-    assert.throws(() => {iocT7.setDeps(defaultDependencyObject);}, {name: 'Error', message: `set("mainDep") is not valid in production mode.`});
+    assert.throws(() => {iocT7.setDeps(defaultDependencyObject);}, {name: 'Error', message: `ioc.setDeps("mainDep") is not valid in production mode.`});
   });
   it("setDeps multiple dependency functionality", async () => {
     // Setup Dependencies
@@ -194,6 +194,11 @@ describe("ioc tests", () => {
     iocT9.reset();
     assert.strictEqual(iocT9.get("firstDep"), defaultDependencyOne);
     assert.strictEqual(iocT9.get("secondDep"), defaultDependencyTwo);
+
+    // SetDeps does not touch any dependency whose name was not passed in the call
+    assert.strictEqual((iocT9.setDeps(overrideDependencyOneObject, true))["firstDep"], iocT9.get("firstDep"));
+    assert.strictEqual(iocT9.get("secondDep"), defaultDependencyTwo);
+    iocT9.reset();
 
     // Production mode resets all dependencies
     iocT9.setDeps(overrideDependencyObject, true);
