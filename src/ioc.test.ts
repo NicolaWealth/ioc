@@ -168,6 +168,7 @@ describe("ioc tests", () => {
     const overrideDependencyOne = sinon.stub();
     const overrideDependencyTwo = sinon.stub();
     const overrideDependencyOneObject = {firstDep: overrideDependencyOne};
+    const overrideDependencyTwoObject = {secondDep: overrideDependencyTwo};
     const overrideDependencyObject = {firstDep: overrideDependencyOne, secondDep: overrideDependencyTwo};
 
     // Setup IOC
@@ -196,9 +197,19 @@ describe("ioc tests", () => {
     assert.strictEqual(iocT9.get("secondDep"), defaultDependencyTwo);
 
     // SetDeps does not touch any dependency whose name was not passed in the call
+    // Override one default
     assert.strictEqual((iocT9.setDeps(overrideDependencyOneObject, true))["firstDep"], iocT9.get("firstDep"));
     assert.strictEqual(iocT9.get("secondDep"), defaultDependencyTwo);
     iocT9.reset();
+    assert.strictEqual(iocT9.get("firstDep"), defaultDependencyOne);
+    assert.strictEqual(iocT9.get("secondDep"), defaultDependencyTwo);
+
+    // Override all defaults
+    assert.strictEqual((iocT9.setDeps(overrideDependencyOneObject, true))["firstDep"], iocT9.get("firstDep"));
+    assert.strictEqual(iocT9.get("secondDep"), defaultDependencyTwo);
+    assert.strictEqual((iocT9.setDeps(overrideDependencyTwoObject, true))["secondDep"], iocT9.get("secondDep"));
+    assert.strictEqual(iocT9.get("firstDep"), overrideDependencyOne);
+
 
     // Production mode resets all dependencies
     iocT9.setDeps(overrideDependencyObject, true);
