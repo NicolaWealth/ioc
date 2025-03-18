@@ -23,5 +23,5 @@ jobs:
       # Run Tests      
       - run: npm test
       # Run Build Script      
-      - run: npm run build                                                          
+      - run: npm run build:gitactions
 

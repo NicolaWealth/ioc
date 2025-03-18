@@ -37,6 +37,7 @@
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json && npm run rename:esm",
     "build": "npm run build:cjs && npm run build:esm && tsc -b ./tsconfig.types.json",
+    "build:gitactions": "npm run build:cjs && tsc -p tsconfig.esm.json && tsc -b ./tsconfig.types.json",
     "rename:esm": "/bin/zsh ./scripts/fix-mjs.sh",
     "lint": "eslint src",
     "test": "mocha",

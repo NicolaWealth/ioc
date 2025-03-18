@@ -1,5 +1,3 @@
-#!/bin/bash
-
 for file in ./dist/esm/*.js; do
   echo "Updating $file contents..."
   sed -i '' "s/\.js'/\.mjs'/g" "$file"
