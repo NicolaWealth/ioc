@@ -18,9 +18,7 @@ _/
 *.pid
 test-results.xml
 .nyc_output/
-.idea/dataSources/
-.idea/dataSources.xml
-.idea/dataSources.local.xml
+.idea
 *.secret.source
 secret.source
 *.secret.sh
