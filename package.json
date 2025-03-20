@@ -33,10 +33,6 @@
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf dist/* && rm -f tsconfig.tsbuildinfo",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build:esm": "tsc -p tsconfig.esm.json && npm run rename:esm",
-    "build:other": "npm run build:cjs && npm run build:esm && tsc -b ./tsconfig.types.json",
-    "build:gitactions": "npm run build:cjs && tsc -p tsconfig.esm.json && tsc -b ./tsconfig.types.json",
     "build": "microbundle",
     "rename:esm": "/bin/zsh ./scripts/fix-mjs.sh",
     "lint": "eslint src",
