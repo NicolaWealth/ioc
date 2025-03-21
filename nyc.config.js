@@ -1,3 +1,5 @@
+const covMin = process.env.COV_MIN || 100;
+
 module.exports = {
   "require": [
     "ts-node/register",
@@ -22,13 +24,13 @@ module.exports = {
     "**/bootstrap.ts",
     "**/index.ts",
     "**/index.tsx",
-    "**/ioc.ts",
+    "src/ioc.ts"
   ],
   "check-coverage": true,
-  "statements": 100,
-  "branches": 100,
-  "lines": 100,
-  "functions": 100,
+  "statements": covMin,
+  "branches": covMin,
+  "lines": covMin,
+  "functions": covMin,
   "sourceMap": true,
   "instrument": true,
   "reporter": [
