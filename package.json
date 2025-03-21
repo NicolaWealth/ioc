@@ -1,15 +1,15 @@
 {
   "name": "@nicolawealth/ioc",
   "version": "0.2.0",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "unpkg": "./dist/index.umd.js",
   "types": "./dist/types/index.d.ts",
   "source": "src/index.ts",
   "exports": {
     ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs"
+      "require": "./dist/index.js",
+      "import": "./dist/index.js"
     }
   },
   "files": [
