@@ -1,15 +1,15 @@
 {
   "name": "@nicolawealth/ioc",
-  "version": "0.2.1",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
+  "version": "1.0.0",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.umd.js",
   "unpkg": "./dist/index.umd.js",
   "types": "./dist/types/index.d.ts",
   "source": "src/index.ts",
   "exports": {
     ".": {
-      "require": "./dist/index.js",
-      "import": "./dist/index.js"
+      "require": "./dist/index.umd.js",
+      "import": "./dist/index.umd.js"
     }
   },
   "files": [
@@ -37,7 +37,7 @@
     "build:esm": "tsc -p tsconfig.esm.json && npm run rename:esm",
     "build:other": "npm run build:cjs && npm run build:esm && tsc -b ./tsconfig.types.json",
     "build:gitactions": "npm run build:cjs && tsc -p tsconfig.esm.json && tsc -b ./tsconfig.types.json",
-    "build": "microbundle",
+    "build": "microbundle --format umd",
     "rename:esm": "/bin/zsh ./scripts/fix-mjs.sh",
     "lint": "eslint src",
     "test": "mocha",
