@@ -8,20 +8,19 @@ on:
 
 jobs:
   test:
-    # Using Ubuntun (most common OS used with github actions but can also linux, and some other options)  
-    runs-on: ubuntu-latest 
+    # Using Ubuntu
+    runs-on: ubuntu-latest
     container:
       # Using Node JS Version 22
-      image: node:22 
+      image: node:22
     steps:
-      # Checkout Code    
+      # Checkout Code
       - uses: actions/checkout@v3
         with:
           node-version: 22
-      # Install Dependencies          
+      # Install Dependencies
       - run: npm ci
-      # Run Tests      
+      # Run Tests
       - run: npm test
-      # Run Build Script      
+      # Run Build Script
       - run: npm run build
-
