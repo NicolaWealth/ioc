@@ -1,13 +1,17 @@
-name: Publish to NPM
+name: Test
 on:
-  release:
-    types: [ created ]
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
@@ -18,15 +22,12 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Dependencies
         run: npm ci
 
-      - name: Build
-        run: npm run build
+      - name: Test
+        run: npm test
 
-      - name: Publish
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Build
+        run: npm run build:gitactions
