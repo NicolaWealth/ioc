@@ -15,8 +15,6 @@ jobs:
   check:
     name: Check
     runs-on: ubuntu-24.04
-    env:
-      COV_MIN: 100
 
     steps:
       - name: Checkout
@@ -37,29 +35,7 @@ jobs:
         run: npm run cover:report
 
       - name: Coverage Extraction
-        id: extract_coverage
-        run: |
-          COVERAGE=$(
-          node -e "
-          const fs = require('fs');
-          const { extractCoverage } = require('@nicolawealth/code_coverage_extractor');
-          const coverageData = JSON.parse(fs.readFileSync('./coverage/coverage-final.json', 'utf-8'))
-          const result = extractCoverage(coverageData, './codecov/badge.json');
-          console.log(result);
-          ")
-          COVERAGE=$(echo $COVERAGE | xargs)
-          INT_COV=${COVERAGE%.*}
-          echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
-          echo "INT_COV=$INT_COV" >> $GITHUB_ENV
-
-      - name: Coverage Threshold Assertion
-        run: |
-          if [ "$INT_COV" -lt "$COV_MIN" ]; then
-            echo "Assertion failed: Coverage is $INT_COV% (required: $COV_MIN%)"
-            exit 1
-          else
-            echo "Assertion passed: Coverage is $INT_COV%"
-          fi
+        run: npm run cover:extract
 
       - name: Badge Update
         if: github.event_name == 'push'
