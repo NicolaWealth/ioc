@@ -1,6 +1,6 @@
 {
   "name": "@nicolawealth/ioc",
-  "type": "commonjs",
+  "type": "module",
   "version": "1.0.0",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.umd.js",
