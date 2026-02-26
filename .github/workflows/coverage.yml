@@ -49,6 +49,6 @@ jobs:
           if ! git diff --quiet codecov/badge.json; then
             git add codecov/badge.json
             git commit -m "Update coverage badge"
-            git push origin main
+            git push origin ${{ github.ref_name }}
           fi
 
