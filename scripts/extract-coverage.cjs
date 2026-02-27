@@ -26,7 +26,7 @@ if (typeof coverage !== 'string' && typeof coverage !== 'number') {
   process.exit(1);
 }
 
-const coverageMatch = String(coverage).match(/^(\d+(\.\d)?)$/);
+const coverageMatch = String(coverage).match(/^(\d+(\.\d+)?)$/);
 if (!coverageMatch) {
   console.error(`Invalid coverage value from extractCoverage: "${coverage}". Expected a numeric string or number.`);
   process.exit(1);
