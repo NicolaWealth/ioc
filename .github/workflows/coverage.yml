@@ -8,8 +8,7 @@ on:
       - main
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 jobs:
   check:
@@ -40,8 +39,39 @@ jobs:
       - name: Coverage Extraction
         run: npm run cover:extract
 
-      - name: Badge Update
-        if: github.event_name == 'push'
+  badge_update:
+    name: Badge Update
+    if: github.event_name == 'push'
+    needs: check
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          token: ${{ github.token }}
+
+      - name: Node Setup
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22.17.1'
+          cache: 'npm'
+
+      - name: Dependencies
+        run: npm ci
+
+      - name: Coverage Report
+        env:
+          NODE_OPTIONS: ""
+          TS_NODE_PROJECT: tsconfig.json
+        run: npx nyc --nycrc-path nyc.config.cjs --reporter=html --reporter=lcov --reporter=text --reporter=json mocha --config .mocharc.cjs -c --reporter=spec
+
+      - name: Coverage Extraction
+        run: npm run cover:extract
+
+      - name: Commit Badge
         run: |
           git config --global user.email "software@nicolawealth.com"
           git config --global user.name "actlion"
