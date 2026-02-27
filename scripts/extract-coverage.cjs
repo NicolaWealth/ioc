@@ -21,14 +21,14 @@ try {
   process.exit(1);
 }
 
-if (typeof coverage !== 'string') {
-  console.error(`Invalid coverage value type from extractCoverage: ${typeof coverage}. Expected a numeric string.`);
+if (typeof coverage !== 'string' && typeof coverage !== 'number') {
+  console.error(`Invalid coverage value type from extractCoverage: ${typeof coverage}. Expected a numeric string or number.`);
   process.exit(1);
 }
 
-const parsedCoverage = parseFloat(coverage);
+const parsedCoverage = parseFloat(String(coverage));
 if (!Number.isFinite(parsedCoverage)) {
-  console.error(`Invalid coverage value from extractCoverage: "${coverage}". Expected a numeric string.`);
+  console.error(`Invalid coverage value from extractCoverage: "${coverage}". Expected a numeric string or number.`);
   process.exit(1);
 }
 
