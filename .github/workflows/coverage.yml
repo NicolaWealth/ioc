@@ -32,9 +32,18 @@ jobs:
 
       - name: Coverage Report
         run: npm run cover:report
+        env:
+          NODE_OPTIONS: --experimental-vm-modules
+          TS_NODE_PROJECT: tsconfig.cjs.json
 
       - name: Coverage Extraction
         run: npm run cover:extract
+
+      - name: Upload Badge Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-badge
+          path: codecov/badge.json
 
   badge_update:
     name: Badge Update
@@ -50,20 +59,11 @@ jobs:
         with:
           token: ${{ github.token }}
 
-      - name: Node Setup
-        uses: actions/setup-node@v6
+      - name: Download Badge Artifact into codecov/
+        uses: actions/download-artifact@v4
         with:
-          node-version: '22'
-          cache: 'npm'
-
-      - name: Dependencies
-        run: npm ci
-
-      - name: Coverage Report
-        run: npm run cover:report
-
-      - name: Coverage Extraction
-        run: npm run cover:extract
+          name: coverage-badge
+          path: codecov/
 
       - name: Commit Badge
         run: |
@@ -75,4 +75,3 @@ jobs:
             git commit -m "Update coverage badge"
             git push origin ${{ github.ref_name }}
           fi
-          
