@@ -24,17 +24,14 @@ jobs:
       - name: Node Setup
         uses: actions/setup-node@v6
         with:
-          node-version: '22.17.1'
+          node-version: '22'
           cache: 'npm'
 
       - name: Dependencies
         run: npm ci
 
       - name: Coverage Report
-        env:
-          NODE_OPTIONS: ""
-          TS_NODE_PROJECT: tsconfig.json
-        run: npx nyc --nycrc-path nyc.config.cjs --reporter=html --reporter=lcov --reporter=text --reporter=json mocha --config .mocharc.cjs -c --reporter=spec
+        run: npm run cover:report
 
       - name: Coverage Extraction
         run: npm run cover:extract
@@ -56,17 +53,14 @@ jobs:
       - name: Node Setup
         uses: actions/setup-node@v6
         with:
-          node-version: '22.17.1'
+          node-version: '22'
           cache: 'npm'
 
       - name: Dependencies
         run: npm ci
 
       - name: Coverage Report
-        env:
-          NODE_OPTIONS: ""
-          TS_NODE_PROJECT: tsconfig.json
-        run: npx nyc --nycrc-path nyc.config.cjs --reporter=html --reporter=lcov --reporter=text --reporter=json mocha --config .mocharc.cjs -c --reporter=spec
+        run: npm run cover:report
 
       - name: Coverage Extraction
         run: npm run cover:extract
@@ -81,4 +75,4 @@ jobs:
             git commit -m "Update coverage badge"
             git push origin ${{ github.ref_name }}
           fi
-
+          

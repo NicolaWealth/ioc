@@ -43,10 +43,42 @@
     "lint": "eslint src",
     "test": "mocha",
     "test-r": "mocha -R spec",
-    "cover": "nyc --nycrc-path nyc.config.cjs mocha --config .mocharc.cjs",
-    "cover:report": "nyc --nycrc-path nyc.config.cjs --reporter=html --reporter=lcov --reporter=text --reporter=json mocha --config .mocharc.cjs -c --reporter=spec",
+    "cover": "c8 mocha --config .mocharc.cjs",
+    "cover:report": "c8 --reporter=html --reporter=lcov --reporter=text --reporter=json mocha --config .mocharc.cjs -c --reporter=spec",
     "cover:extract": "node scripts/extract-coverage.cjs",
     "doc": "npx typedoc src/*.ts src/**/*.ts --out dist/doc"
+  },
+  "c8": {
+    "all": true,
+    "check-coverage": true,
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "include": [
+      "src/**/*.ts",
+      "src/**/*.tsx"
+    ],
+    "exclude": [
+      "src/ioc.ts",
+      "**/*_sql.ts",
+      "**/*.test.ts",
+      "**/src/@types/**/index.d.ts",
+      "**/*.test_*.ts",
+      "**/*.test.tsx",
+      "**/*.test_*.tsx",
+      "**/*.type.ts",
+      "**/*.provider.ts",
+      "**/*.default.ts",
+      "**/*.default.tsx",
+      "**/bootstrap.ts",
+      "**/index.ts",
+      "**/index.tsx"
+    ],
+    "statements": 100,
+    "branches": 100,
+    "lines": 100,
+    "functions": 100
   },
   "engines": {
     "node": ">=22"
@@ -60,12 +92,12 @@
     "@types/node": "^22",
     "@types/sinon": "^10",
     "@typescript-eslint/eslint-plugin": "^8",
+    "c8": "^10.1.3",
     "eslint": "^9",
     "eslint-config-turbo": "^2",
     "microbundle": "^0.15.1",
     "mocha": "^10",
     "mocha-junit-reporter": "^2",
-    "nyc": "^15",
     "sinon": "^19",
     "ts-node": "^10",
     "typescript": "^5"
