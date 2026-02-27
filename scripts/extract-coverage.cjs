@@ -26,17 +26,22 @@ if (typeof coverage !== 'string' && typeof coverage !== 'number') {
   process.exit(1);
 }
 
-const parsedCoverage = parseFloat(String(coverage));
-if (!Number.isFinite(parsedCoverage)) {
+const coverageMatch = String(coverage).match(/^(\d+(\.\d)?)$/);
+if (!coverageMatch) {
   console.error(`Invalid coverage value from extractCoverage: "${coverage}". Expected a numeric string or number.`);
+  process.exit(1);
+}
+const parsedCoverage = parseFloat(coverageMatch[1]);
+if (!Number.isFinite(parsedCoverage) || parsedCoverage < 0 || parsedCoverage > 100) {
+  console.error(`Coverage value out of range: "${coverage}". Expected a value between 0 and 100.`);
   process.exit(1);
 }
 
 const intCov = Math.floor(parsedCoverage);
 
-console.log(`Coverage: ${coverage}%`);
+console.log(`Coverage: ${parsedCoverage}%`);
 
 if (process.env.GITHUB_ENV) {
-  fs.appendFileSync(process.env.GITHUB_ENV, `COVERAGE=${coverage}\n`);
-  fs.appendFileSync(process.env.GITHUB_ENV, `INT_COV=${intCov}\n`);
+  fs.appendFileSync(process.env.GITHUB_ENV, `COVERAGE=${parsedCoverage.toString()}\n`);
+  fs.appendFileSync(process.env.GITHUB_ENV, `INT_COV=${intCov.toString()}\n`);
 }

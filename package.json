@@ -1,16 +1,15 @@
 {
   "name": "@nicolawealth/ioc",
-  "type": "module",
   "version": "1.0.2",
-  "main": "./dist/index.umd.js",
-  "module": "./dist/index.umd.js",
-  "unpkg": "./dist/index.umd.js",
-  "types": "./dist/types/index.d.ts",
   "source": "src/index.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.module.js",
+  "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/index.umd.js",
-      "import": "./dist/index.umd.js"
+      "require": "./dist/index.js",
+      "import": "./dist/index.module.js",
+      "types": "./dist/types/index.d.ts"
     }
   },
   "files": [
@@ -34,12 +33,10 @@
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf dist/* && rm -f tsconfig.tsbuildinfo",
+    "build": "microbundle --format esm,cjs",
     "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build:esm": "tsc -p tsconfig.esm.json && npm run rename:esm",
-    "build:other": "npm run build:cjs && npm run build:esm && tsc -b ./tsconfig.types.json",
-    "build:gitactions": "npm run build:cjs && tsc -p tsconfig.esm.json && tsc -b ./tsconfig.types.json",
-    "build": "microbundle --format umd",
-    "rename:esm": "/bin/zsh ./scripts/fix-mjs.sh",
+    "build:other": "npm run build:cjs && npm run build && tsc -b ./tsconfig.types.json",
+    "build:gitactions": "npm run build:cjs && npm run build && tsc -b ./tsconfig.types.json",
     "lint": "eslint src",
     "test": "mocha",
     "test-r": "mocha -R spec",
