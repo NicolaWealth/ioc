@@ -1,21 +1,25 @@
 {
   "name": "@nicolawealth/ioc",
-  "version": "1.0.1",
-  "main": "./dist/index.umd.js",
-  "module": "./dist/index.umd.js",
-  "unpkg": "./dist/index.umd.js",
-  "types": "./dist/types/index.d.ts",
+  "version": "1.0.2",
   "source": "src/index.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.module.js",
+  "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/index.umd.js",
-      "import": "./dist/index.umd.js"
+      "require": "./dist/index.js",
+      "import": "./dist/index.module.js",
+      "types": "./dist/types/index.d.ts"
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NicolaWealth/ioc.git"
   },
   "files": [
     "dist/"
   ],
-  "author": "Nicola Wealth Inc",
+  "author": "Nicola Wealth Management Ltd.",
   "contributors": [
     {
       "name": "Cliff Hammerschmidt"
@@ -33,18 +37,49 @@
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf dist/* && rm -f tsconfig.tsbuildinfo",
+    "build": "microbundle --format esm,cjs",
     "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build:esm": "tsc -p tsconfig.esm.json && npm run rename:esm",
-    "build:other": "npm run build:cjs && npm run build:esm && tsc -b ./tsconfig.types.json",
-    "build:gitactions": "npm run build:cjs && tsc -p tsconfig.esm.json && tsc -b ./tsconfig.types.json",
-    "build": "microbundle --format umd",
-    "rename:esm": "/bin/zsh ./scripts/fix-mjs.sh",
+    "build:other": "npm run build:cjs && npm run build && tsc -b ./tsconfig.types.json",
+    "build:gitactions": "npm run build:cjs && npm run build && tsc -b ./tsconfig.types.json",
     "lint": "eslint src",
     "test": "mocha",
     "test-r": "mocha -R spec",
-    "cover": "nyc mocha",
-    "cover:report": "nyc --reporter=html --reporter=lcov --reporter=text --reporter=json mocha -c --reporter=spec",
+    "cover": "c8 mocha --config .mocharc.cjs",
+    "cover:report": "c8 --reporter=html --reporter=lcov --reporter=text --reporter=json mocha --config .mocharc.cjs -c --reporter=spec",
+    "cover:extract": "node scripts/extract-coverage.cjs",
     "doc": "npx typedoc src/*.ts src/**/*.ts --out dist/doc"
+  },
+  "c8": {
+    "all": true,
+    "check-coverage": true,
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "include": [
+      "src/**/*.ts",
+      "src/**/*.tsx"
+    ],
+    "exclude": [
+      "src/ioc.ts",
+      "**/*_sql.ts",
+      "**/*.test.ts",
+      "**/src/@types/**/index.d.ts",
+      "**/*.test_*.ts",
+      "**/*.test.tsx",
+      "**/*.test_*.tsx",
+      "**/*.type.ts",
+      "**/*.provider.ts",
+      "**/*.default.ts",
+      "**/*.default.tsx",
+      "**/bootstrap.ts",
+      "**/index.ts",
+      "**/index.tsx"
+    ],
+    "statements": 100,
+    "branches": 100,
+    "lines": 100,
+    "functions": 100
   },
   "engines": {
     "node": ">=22"
@@ -58,12 +93,12 @@
     "@types/node": "^22",
     "@types/sinon": "^10",
     "@typescript-eslint/eslint-plugin": "^8",
+    "c8": "^11.0.0",
     "eslint": "^9",
     "eslint-config-turbo": "^2",
     "microbundle": "^0.15.1",
     "mocha": "^10",
     "mocha-junit-reporter": "^2",
-    "nyc": "^15",
     "sinon": "^19",
     "ts-node": "^10",
     "typescript": "^5"

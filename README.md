@@ -42,4 +42,4 @@ The `ioc` package provides the instance of the `ioc` object in `ioc.ts`. For pro
 Note: be aware the original dependencies are still imported when using `ioc` in tests and any side effects of those imports are run during tests
 
 # Testing
-Tests can be found in `ioc.test.ts` located in `ioc/src` and should be run with sinon, mocha and nyc.
+Tests can be found in `ioc.test.ts` located in `ioc/src` and should be run with sinon, mocha and c8.

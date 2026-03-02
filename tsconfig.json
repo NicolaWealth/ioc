@@ -25,6 +25,11 @@
     "newLine": "LF",
     "rootDir": "src"
   },
+  "ts-node": {
+    "moduleTypes": {
+      "**/*.ts": "cjs"
+    }
+  },
   "include": [
     "src/**/*.ts"
   ]
