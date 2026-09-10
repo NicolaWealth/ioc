@@ -24,8 +24,8 @@ jobs:
       - name: Node Setup
         uses: actions/setup-node@v6
         with:
-          node-version: '22'
-          cache: 'npm'
+          node-version: "22.17.1"
+          cache: "npm"
 
       - name: Dependencies
         run: npm ci
@@ -34,7 +34,6 @@ jobs:
         run: npm run cover:report
         env:
           NODE_OPTIONS: --experimental-vm-modules
-          TS_NODE_PROJECT: tsconfig.cjs.json
 
       - name: Coverage Extraction
         run: npm run cover:extract
