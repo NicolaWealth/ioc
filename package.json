@@ -7,9 +7,9 @@
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/types/index.d.ts",
       "require": "./dist/index.js",
-      "import": "./dist/index.module.mjs",
-      "types": "./dist/types/index.d.ts"
+      "import": "./dist/index.module.mjs"
     }
   },
   "repository": {
@@ -99,7 +99,7 @@
     "ts-node": "^10",
     "typescript": "^5"
   },
-  "packageManager": "npm@10.9.0",
+  "packageManager": "npm@12.0.2",
   "allowScripts": {
     "fsevents@2.3.3": true
   }

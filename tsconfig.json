@@ -21,7 +21,7 @@
     "inlineSources": true,
     "removeComments": false,
     "allowSyntheticDefaultImports": true,
-    "lib": [ "esnext" ],
+    "lib": ["esnext"],
     "newLine": "LF",
     "rootDir": "src"
   },
@@ -30,7 +30,5 @@
       "**/*.ts": "cjs"
     }
   },
-  "include": [
-    "src/**/*.ts"
-  ]
+  "include": ["src/**/*.ts"]
 }
