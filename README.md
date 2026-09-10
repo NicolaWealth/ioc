@@ -5,6 +5,9 @@
 The `ioc` (Inversion of Control) package simplifies developer testing by allowing for decoupling of code from its dependencies. With `ioc`, dependencies can be overridden with stubs in test cases such that the original dependencies are not invoked during testing.
 
 # Installation
+
+Requires Node.js ≥ 22.12.0.
+
 This package should be installed via npm. You must have npm installed first. The following can be run on the commandline to install the `ioc` package with npm:
 
 `npm install @nicolawealth/ioc`
