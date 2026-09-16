@@ -6,7 +6,7 @@ export default defineConfig({
   output: [
     {
       file: "dist/index.module.mjs",
-      format: "esm",
+      format: "es",
       sourcemap: true,
       cleanDir: true
     },
